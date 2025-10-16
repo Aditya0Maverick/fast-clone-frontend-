@@ -40,16 +40,17 @@ startBtn.addEventListener("click", async () => {
   startBtn.disabled = false;
 });
 
+// ----------------- DOWNLOAD -----------------
 async function testDownloadSpeed() {
   try {
-    const fileUrl = `${BACKEND_URL}/testfile`; // 5MB file from backend
+    const fileUrl = `${BACKEND_URL}/testfile`;
     const startTime = performance.now();
     const response = await fetch(fileUrl + "?cache=" + Math.random());
     const blob = await response.blob();
     const endTime = performance.now();
 
     const fileSizeInBytes = blob.size;
-    const duration = (endTime - startTime) / 1000; // seconds
+    const duration = (endTime - startTime) / 1000; // in seconds
     const bitsLoaded = fileSizeInBytes * 8;
     const speedMbps = bitsLoaded / duration / 1024 / 1024;
 
@@ -64,6 +65,7 @@ async function testDownloadSpeed() {
   }
 }
 
+// ----------------- UPLOAD -----------------
 async function testUploadSpeed() {
   try {
     const uploadUrl = `${BACKEND_URL}/upload`;
@@ -72,14 +74,17 @@ async function testUploadSpeed() {
     crypto.getRandomValues(randomData);
 
     const startTime = performance.now();
-    await fetch(uploadUrl, { method: "POST", body: randomData });
+    await fetch(uploadUrl, {
+      method: "POST",
+      body: randomData,
+    });
     const endTime = performance.now();
 
-    const duration = (endTime - startTime) / 1000;
+    const duration = (endTime - startTime) / 1000; // in seconds
     const bitsUploaded = dataSize * 8;
     const speedMbps = bitsUploaded / duration / 1024 / 1024;
 
-    console.log("Uploaded:", bitsUploaded / 8, "bytes");
+    console.log("Uploaded:", dataSize, "bytes");
     console.log("Duration:", duration.toFixed(2), "s");
     console.log("Speed:", speedMbps.toFixed(2), "Mbps");
 
@@ -90,6 +95,7 @@ async function testUploadSpeed() {
   }
 }
 
+// ----------------- ANIMATION -----------------
 function animateSpeedDisplay(targetSpeed, element) {
   return new Promise((resolve) => {
     const currentVal = parseFloat(element.textContent) || 0;
@@ -120,3 +126,4 @@ function animateSpeedDisplay(targetSpeed, element) {
 function delay(ms) {
   return new Promise((res) => setTimeout(res, ms));
 }
+// ----------------- END -----------------
