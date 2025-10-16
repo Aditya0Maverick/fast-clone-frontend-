@@ -66,34 +66,7 @@ async function testDownloadSpeed() {
 }
 
 // ----------------- UPLOAD -----------------
-async function testUploadSpeed() {
-  try {
-    const uploadUrl = `${BACKEND_URL}/upload`;
-    const dataSize = 5 * 1024 * 1024; // 5 MB
-    const randomData = new Uint8Array(dataSize);
-    crypto.getRandomValues(randomData);
 
-    const startTime = performance.now();
-    await fetch(uploadUrl, {
-      method: "POST",
-      body: randomData,
-    });
-    const endTime = performance.now();
-
-    const duration = (endTime - startTime) / 1000; // in seconds
-    const bitsUploaded = dataSize * 8;
-    const speedMbps = bitsUploaded / duration / 1024 / 1024;
-
-    console.log("Uploaded:", dataSize, "bytes");
-    console.log("Duration:", duration.toFixed(2), "s");
-    console.log("Speed:", speedMbps.toFixed(2), "Mbps");
-
-    return Number(speedMbps.toFixed(2));
-  } catch (err) {
-    console.error("Upload test failed:", err);
-    return 0;
-  }
-}
 
 // ----------------- ANIMATION -----------------
 function animateSpeedDisplay(targetSpeed, element) {
