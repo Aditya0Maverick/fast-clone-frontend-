@@ -6,7 +6,7 @@ const downloadText = document.getElementById("downloadText");
 const uploadText = document.getElementById("uploadText");
 const circle = document.querySelector(".circle");
 
-// Replace with your deployed backend URL
+// Your deployed backend URL
 const BACKEND_URL = "https://fast-clone-production.up.railway.app";
 
 startBtn.addEventListener("click", async () => {
@@ -66,10 +66,24 @@ async function testDownloadSpeed() {
 
 async function testUploadSpeed() {
   try {
-    // simulated upload
-    const simulatedUploadSpeed = Math.random() * 10 + 5; // 5-15 Mbps
-    await delay(1500);
-    return Number(simulatedUploadSpeed.toFixed(2));
+    const uploadUrl = `${BACKEND_URL}/upload`;
+    const dataSize = 5 * 1024 * 1024; // 5 MB
+    const randomData = new Uint8Array(dataSize);
+    crypto.getRandomValues(randomData);
+
+    const startTime = performance.now();
+    await fetch(uploadUrl, { method: "POST", body: randomData });
+    const endTime = performance.now();
+
+    const duration = (endTime - startTime) / 1000;
+    const bitsUploaded = dataSize * 8;
+    const speedMbps = bitsUploaded / duration / 1024 / 1024;
+
+    console.log("Uploaded:", bitsUploaded / 8, "bytes");
+    console.log("Duration:", duration.toFixed(2), "s");
+    console.log("Speed:", speedMbps.toFixed(2), "Mbps");
+
+    return Number(speedMbps.toFixed(2));
   } catch (err) {
     console.error("Upload test failed:", err);
     return 0;
@@ -106,4 +120,3 @@ function animateSpeedDisplay(targetSpeed, element) {
 function delay(ms) {
   return new Promise((res) => setTimeout(res, ms));
 }
-
