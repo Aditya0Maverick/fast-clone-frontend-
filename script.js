@@ -3,7 +3,6 @@ const startBtn = document.getElementById("start");
 const speedValue = document.getElementById("speedValue"); // circle number
 const statusText = document.getElementById("statusText");
 const downloadText = document.getElementById("downloadText");
-const uploadText = document.getElementById("uploadText");
 const circle = document.querySelector(".circle");
 
 // Your deployed backend URL
@@ -16,23 +15,12 @@ startBtn.addEventListener("click", async () => {
   // reset UI
   speedValue.textContent = "0";
   downloadText.textContent = "Download: 0 Mbps";
-  uploadText.textContent = "Upload: 0 Mbps";
 
   // DOWNLOAD TEST
   statusText.textContent = "Testing download speed...";
   const downloadSpeed = await testDownloadSpeed();
   downloadText.textContent = `Download: ${downloadSpeed} Mbps`;
   await animateSpeedDisplay(downloadSpeed, speedValue);
-
-  // small pause before upload
-  await delay(500);
-  await animateSpeedDisplay(0, speedValue);
-
-  // UPLOAD TEST
-  statusText.textContent = "Testing upload speed...";
-  const uploadSpeed = await testUploadSpeed();
-  uploadText.textContent = `Upload: ${uploadSpeed} Mbps`;
-  await animateSpeedDisplay(uploadSpeed, speedValue);
 
   // done
   statusText.textContent = "Test complete ✅";
@@ -64,9 +52,6 @@ async function testDownloadSpeed() {
     return 0;
   }
 }
-
-// ----------------- UPLOAD -----------------
-
 
 // ----------------- ANIMATION -----------------
 function animateSpeedDisplay(targetSpeed, element) {
